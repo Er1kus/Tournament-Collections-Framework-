@@ -2,21 +2,22 @@ package ru.netology.domain;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import ru.netology.manager.Game;
 import ru.netology.repository.NotRegisteredException;
+import org.junit.jupiter.api.Nested;
 
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
 
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class GameTest {
     private Game game = new Game();
-    private List<Player> players = new ArrayList<>();
+    protected Map<String, Player> players = new HashMap<>();
+    ;
     Player first = new Player(101, "John Wick", 89);
     Player second = new Player(32, "Leon", 77);
     Player third = new Player(15, "Willy Wonka", 15);
@@ -28,61 +29,108 @@ public class GameTest {
     Player ninth = new Player(51, "Hannibal Lector", 80);
     Player tenth = new Player(11, "Zlatan Ibrahimovic", 73);
 
-    @BeforeEach
-    void insertData() {
-        game.register(first);
-        game.register(second);
-        game.register(third);
-        game.register(fourth);
-        game.register(fifth);
-        game.register(sixth);
-        game.register(seventh);
-        game.register(eighth);
-        game.register(ninth);
-        game.register(tenth);
-    }
+    @Nested
+    @DisplayName("Checking the presence of a player")
+    class compositionOfThePlayers {
+        @BeforeEach
+        void insertData() {
+            game.register(first);
+            game.register(second);
+            game.register(third);
+            game.register(fourth);
+            game.register(fifth);
+            game.register(sixth);
+            game.register(seventh);
+            game.register(eighth);
+            game.register(ninth);
+            game.register(tenth);
+        }
 
-    @Test
-    public void findByNameTest() {
-        int actual = game.findByName("Leon");
-        int expected = 1;
-        Assertions.assertEquals(expected, actual);
-    }
+        @Test
+        @DisplayName("Player on the list")
+        public void shouldFindByNameTest() {
+            int actual = game.findByName("Zlatan Ibrahimovic");
+            int expected = 73;
+            Assertions.assertEquals(expected, actual);
+        }
 
-    @Test
-    public void ShouldWinFirstTest() {
-        int actual = game.round("John Wick", "Pikachu");
-        int expected = 1;
-        Assertions.assertEquals(expected, actual);
-    }
+        @Nested
+        @DisplayName("Can play the game")
+        class playing {
+            @BeforeEach
+            void insertData() {
+                game.register(first);
+                game.register(second);
+                game.register(third);
+                game.register(fourth);
+                game.register(fifth);
+                game.register(sixth);
+                game.register(seventh);
+                game.register(eighth);
+                game.register(ninth);
+                game.register(tenth);
+            }
 
-    @Test
-    public void shouldWinSecondTest() {
-        int actual = game.round("Willy Wonka", "Zlatan Ibrahimovic");
-        int expected = 2;
-        Assertions.assertEquals(expected, actual);
-    }
+            @Test
+            @DisplayName("First player wins")
+            public void ShouldWinFirstTest() {
+                int actual = game.round("John Wick", "Pikachu");
+                int expected = 1;
+                Assertions.assertEquals(expected, actual);
+            }
 
-    //
-    @Test
-    public void shouldNoWinnersTest() {
-        int actual = game.round("Leon", "Black widow");
-        int expected = 0;
-        Assertions.assertEquals(expected, actual);
-    }
+            @Test
+            @DisplayName("Second player wins")
+            public void shouldWinSecondTest() {
+                int actual = game.round("Willy Wonka", "Zlatan Ibrahimovic");
+                int expected = 2;
+                Assertions.assertEquals(expected, actual);
+            }
 
-    @Test
-    public void shouldNoRegisteredFirstTest() {
-        assertThrows(NotRegisteredException.class, () -> {
-            game.round("Mike Wazowski", "Harley Quinn");
-        });
-    }
+            @Test
+            @DisplayName("No winners")
+            public void shouldNoWinnersTest() {
+                int actual = game.round("Leon", "Black widow");
+                int expected = 0;
+                Assertions.assertEquals(expected, actual);
+            }
+        }
 
-    @Test
-    public void shouldNoRegisteredSecondTest() {
-        assertThrows(NotRegisteredException.class, () -> {
-            game.round("Godzilla", "T-Rex");
-        });
+        @Nested
+        @DisplayName("The game cannot be played")
+        class noPlaying {
+            @BeforeEach
+            void insertData() {
+                game.register(first);
+                game.register(second);
+                game.register(third);
+                game.register(fourth);
+                game.register(fifth);
+                game.register(sixth);
+                game.register(seventh);
+                game.register(eighth);
+                game.register(ninth);
+                game.register(tenth);
+            }
+
+            @Test
+            @DisplayName("First player not registered")
+            public void shouldNoRegisteredFirstTest() {
+                assertThrows(NotRegisteredException.class, () -> {
+                    game.round("Mike Wazowski", "Harley Quinn");
+                });
+            }
+
+            @Test
+            @DisplayName("Second player not registered")
+            public void shouldNoRegisteredSecondTest() {
+                assertThrows(NotRegisteredException.class, () -> {
+                    game.round("Godzilla", "T-Rex");
+                });
+            }
+        }
     }
 }
+
+
 
