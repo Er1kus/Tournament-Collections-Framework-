@@ -14,34 +14,34 @@ public class Game {
         players.put(player.getName(), player);
     }
 
-    public int findByName(String name){
+    public int findByName(String name) {
         Player player = players.get(name);
         return player.getStrength();
     }
 
-        public int round (String name1, String name2){
+    public int round(String name1, String name2) {
 
-            Player player1 = players.get(name1);
-            Player player2 = players.get(name2);
-
-
-            if (player1 == null) {
-                throw new NotRegisteredException("Player with this name: " + name1 + " is not registered");
-            }
-            if (player2 == null) {
-                throw new NotRegisteredException("Player with this name: " + name2 + " is not registered");
-            }
+        Player player1 = players.get(name1);
+        Player player2 = players.get(name2);
 
 
-            int strength1 = player1.getStrength();
-            int strength2 = player2.getStrength();
-
-            if (strength1 == strength2) {
-                return 0;
-            }
-            if (strength1 > strength2) {
-                return 1;
-            }
-            return 2;
+        if (player1 == null) {
+            throw new NotRegisteredException("Player with this name: " + name1 + " is not registered");
         }
+        if (player2 == null) {
+            throw new NotRegisteredException("Player with this name: " + name2 + " is not registered");
+        }
+
+
+        int strength1 = player1.getStrength();
+        int strength2 = player2.getStrength();
+
+        if (strength1 == strength2) {
+            return 0;
+        }
+        if (strength1 > strength2) {
+            return 1;
+        }
+        return 2;
     }
+}
